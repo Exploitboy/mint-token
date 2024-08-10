@@ -1,11 +1,8 @@
-Certainly! Here’s a refined `README.md` for your GitHub repository:
-
-```markdown
 # MyToken Smart Contract
 
 ## Overview
 
-`MyToken` is a simple ERC-20 token smart contract written in Solidity. It supports essential features like token minting, burning, transferring, and allowances. This contract is designed to be a basic example of how ERC-20 functionality can be implemented.
+`Alibaba` is a simple ERC-20 token smart contract written in Solidity. It supports essential features like token minting, burning, transferring, and allowances. This contract is designed to be a basic example of how ERC-20 functionality can be implemented.
 
 - **Name:** Alibaba
 - **Symbol:** ALB
@@ -89,7 +86,7 @@ contract MyToken {
         return true;
     }
 }
-```
+
 
 ## Installation
 
@@ -160,10 +157,6 @@ contract MyToken {
 - **Approval:** Emitted when an address is approved to spend tokens on behalf of another address.
 - **Mint:** Emitted when new tokens are minted.
 - **Burn:** Emitted when tokens are burned.
-
-## License
-
-This contract is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 ## Contributing
 
