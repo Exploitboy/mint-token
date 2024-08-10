@@ -97,8 +97,8 @@ contract MyToken {
 2. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/mytoken.git
-   cd mytoken
+   git clone https://github.com/Exploitboy/mint-token.git
+   cd mint-token
    ```
 
 3. **Install dependencies:**
