@@ -2,10 +2,10 @@
 
 ## Overview
 
-`Alibaba` is a simple ERC-20 token smart contract written in Solidity. It supports essential features like token minting, burning, transferring, and allowances. This contract is designed to be a basic example of how ERC-20 functionality can be implemented.
+`Ashu` is a simple ERC-20 token smart contract written in Solidity. It supports essential features like token minting, burning, transferring, and allowances. This contract is designed to be a basic example of how ERC-20 functionality can be implemented.
 
-- **Name:** Alibaba
-- **Symbol:** ALB
+- **Name:** Ashu
+- **Symbol:** ASH
 - **Decimals:** 18
 
 ## Features
@@ -16,73 +16,38 @@
 - **Allowance:** Allows for delegated transfers through `approve` and `transferFrom`.
 
 ## Smart Contract Code
-
-```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract MyToken {
-    string public name = "alibaba";
-    string public symbol = "alb";
-    uint8 public decimals = 18;
-    uint256 public totalSupply;
-    address public owner;
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-    mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) public allowance;
+contract AshuToken is ERC20 {
+    address private admin;
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    event Mint(address indexed to, uint256 amount);
-    event Burn(address indexed from, uint256 amount);
+    constructor() ERC20("Ashu", "ASH") {
+        admin = msg.sender;
+        // Mint an initial supply to the contract's address
+        _mint(address(this), 100 * 10 ** decimals());
+    }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "you are not the contract owner");
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Caller is not the admin");
         _;
     }
 
-    constructor(uint256 initialSupply) {
-        owner = msg.sender;
-        mint(owner, initialSupply);
+    // Only the admin can mint new tokens
+    function createTokens(address recipient, uint256 quantity) public onlyAdmin {
+        _mint(recipient, quantity);
     }
 
-    function mint(address account, uint256 amount) public onlyOwner {
-        require(account != address(0), "we can't mint to the zero address");
-        totalSupply += amount;
-        balanceOf[account] += amount;
-        emit Mint(account, amount);
-        emit Transfer(address(0), account, amount);
+    // Any user can burn their own tokens
+    function destroyTokens(uint256 amount) public {
+        _burn(msg.sender, amount);
     }
 
-    function burn(uint256 amount) public {
-        require(balanceOf[msg.sender] >= amount, "you have insufficient balance");
-        totalSupply -= amount;
-        balanceOf[msg.sender] -= amount;
-        emit Burn(msg.sender, amount);
-        emit Transfer(msg.sender, address(0), amount);
-    }
-
-    function transfer(address recipient, uint256 amount) public returns (bool) {
-        require(balanceOf[msg.sender] >= amount, "you have insufficient balance");
-        balanceOf[msg.sender] -= amount;
-        balanceOf[recipient] += amount;
-        emit Transfer(msg.sender, recipient, amount);
-        return true;
-    }
-
-    function approve(address spender, uint256 amount) public returns (bool) {
-        allowance[msg.sender][spender] = amount;
-        emit Approval(msg.sender, spender, amount);
-        return true;
-    }
-
-    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
-        require(balanceOf[sender] >= amount, "you have insufficient balance");
-        require(allowance[sender][msg.sender] >= amount, "your allowance exceeded");
-        balanceOf[sender] -= amount;
-        balanceOf[recipient] += amount;
-        allowance[sender][msg.sender] -= amount;
-        emit Transfer(sender, recipient, amount);
+    // Any user can transfer tokens
+    function transferTokens(address recipient, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, recipient, amount);
         return true;
     }
 }
